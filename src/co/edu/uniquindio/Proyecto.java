@@ -1,4 +1,5 @@
 package co.edu.uniquindio;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 public class Proyecto {
@@ -12,7 +13,7 @@ public class Proyecto {
     private int diasDesarrollo;
     private double descuentoClienteFrecuente;
 
-    private Desarrollador[]listDesaroolador;
+    private Desarrollador[]listDesarrollador;
     private ServiciosAdicionales[]listServiciosAdicionales;
 
     public Proyecto(String id, LocalDate fechaSolicitud, LocalDate fechaInicio, LocalDate fechaEntrega, String estado, String metodoPago, double valorTotal, int diasDesarrollo,
@@ -23,11 +24,153 @@ public class Proyecto {
         this.fechaEntrega = fechaEntrega;
         this.estado = estado;
         this.metodoPago = metodoPago;
-        this.valorTotal = valorTotal;
+        this.valorTotal = 0.0;
         this.diasDesarrollo = diasDesarrollo;
         this.descuentoClienteFrecuente = descuentoClienteFrecuente;
-        this.listDesaroolador = listDesaroolador;
-        this.listServiciosAdicionales = listServiciosAdicionales;
+        this.listDesarrollador = new Desarrollador[10];
+        this.listServiciosAdicionales = new ServiciosAdicionales[10];
+    }
+    public boolean agregarDesarrollador (Desarrollador dev){
+        if (dev == null || dev.getEstado() == null || !dev.getEstado().equalsIgnoreCase("Disponible")) {
+            return false;
+        }
+        for (int i=0;i<listDesarrollador.length;i++){
+            if (listDesarrollador[i]==null){
+                listDesarrollador[i]=dev;
+                if(this.estado!=null && (this.estado.equalsIgnoreCase("Confirmado")|| this.estado.equalsIgnoreCase("En curso"))){
+                    dev.setEstado("Asignado");
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean agregarServicio(ServiciosAdicionales servicio){
+        if(servicio==null){
+            return false;
+        }
+        for (int i=0;i<listServiciosAdicionales.length;i++){
+            if (listServiciosAdicionales[i]==null){
+                listServiciosAdicionales[i]=servicio;
+                return true;
+            }
+        }
+        return false;
+    }
+    public void cambiarEstado(String nuevoEstado){
+        this.estado=nuevoEstado;
+        if (nuevoEstado.equalsIgnoreCase("Confirmado")|| nuevoEstado.equalsIgnoreCase("En curso")){
+            for (int i=0; i<listDesarrollador.length; i++){
+                if(listDesarrollador[i]!=null){
+                    listDesarrollador[i].setEstado("Asignado");
+                }
+            }
+        } else if (nuevoEstado.equalsIgnoreCase("Finalizado")|| nuevoEstado.equalsIgnoreCase("Cancelado")) {
+            for (int i=0; i<listDesarrollador.length;){
+                if (listDesarrollador[i]!=null){
+                    listDesarrollador[i].setEstado("Disponible");
+                }
+            }
+        }
+    }
+    public double calcularTotal(){
+        double tarifaDiariaTotal=0.0;
+        for (int i=0; i<listDesarrollador.length;i++){
+          if (listDesarrollador[i]!=null){
+              tarifaDiariaTotal+=listDesarrollador[i].getTarifaDiaria();
+          }
+        }
+        double costoDesarrollo=tarifaDiariaTotal*diasDesarrollo;
+        double costoServicios=0.0;
+        for (int i=0;i<listServiciosAdicionales.length;i++){
+            if(listServiciosAdicionales[i]!=null){
+                costoServicios+=listServiciosAdicionales[i].getPrecio();
+            }
+        }
+        double subtotal= costoDesarrollo+costoServicios;
+        double valorDescuenco= subtotal*(descuentoClienteFrecuente/100.0);
+        this.valorTotal=subtotal-valorDescuenco;
+        return this.valorTotal;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public LocalDate getFechaSolicitud() {
+        return fechaSolicitud;
+    }
+
+    public void setFechaSolicitud(LocalDate fechaSolicitud) {
+        this.fechaSolicitud = fechaSolicitud;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDate getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDate fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(String metodoPago) {
+        this.metodoPago = metodoPago;
+    }
+
+    public int getDiasDesarrollo() {
+        return diasDesarrollo;
+    }
+
+    public void setDiasDesarrollo(int diasDesarrollo) {
+        this.diasDesarrollo = diasDesarrollo;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public double getDescuentoClienteFrecuente() {
+        return descuentoClienteFrecuente;
+    }
+
+    public void setDescuentoClienteFrecuente(double descuentoClienteFrecuente) {
+        this.descuentoClienteFrecuente = descuentoClienteFrecuente;
+    }
+
+    public Desarrollador[] getListDesarrollador() {
+        return listDesarrollador;
+    }
+
+    public ServiciosAdicionales[] getListServiciosAdicionales() {
+        return listServiciosAdicionales;
     }
 
 }
