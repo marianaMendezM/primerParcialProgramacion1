@@ -30,15 +30,15 @@ public class Proyecto {
         this.listDesarrollador = new Desarrollador[10];
         this.listServiciosAdicionales = new ServiciosAdicionales[10];
     }
-    public boolean agregarDesarrollador (Desarrollador dev){
-        if (dev == null || dev.getEstado() == null || !dev.getEstado().equalsIgnoreCase("Disponible")) {
+    public boolean agregarDesarrollador (Desarrollador nuevo){
+        if (nuevo == null || !nuevo.estaDisponible()){
             return false;
         }
         for (int i=0;i<listDesarrollador.length;i++){
             if (listDesarrollador[i]==null){
-                listDesarrollador[i]=dev;
+                listDesarrollador[i]=nuevo;
                 if(this.estado!=null && (this.estado.equalsIgnoreCase("Confirmado")|| this.estado.equalsIgnoreCase("En curso"))){
-                    dev.setEstado("Asignado");
+                    nuevo.setEstado("Asignado");
                 }
                 return true;
             }
