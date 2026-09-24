@@ -78,7 +78,7 @@ public class Main {
     }
 
     private static void solicitarCliente() {
-        boolean registro = empresa.registarCliente(new Cliente(
+        boolean registro = empresa.registrarCliente(new Cliente(
                 pedirDatos("Ingrese la Cédula / NIT:"),
                 pedirDatos("Ingrese el Nombre / Razón social:"),
                 pedirDatos("Ingrese el número de teléfono:"),
@@ -88,8 +88,8 @@ public class Main {
 
         if (registro) {
             mostrarMensaje("Cliente registrado exitosamente.");
-        }else{
-            mostrarMensaje("Sin espacio para más clientes.");
+        } else {
+            mostrarMensaje("El cliente ya existe o no hay espacio disponible.");
         }
     }
 
@@ -113,10 +113,12 @@ public class Main {
     private static void solicitarServicio() {
         boolean registro = empresa.registrarServicio(new ServiciosAdicionales(
                 pedirDatos("Ingrese el Código:"),
-                pedirDatos("Ingrese el nombre del servicio:"),
+                pedirDatos("Ingrese el nombre del servicio:"+"\n"+
+                        "Soporte técnico"+"\n"+ "Capacitación de usuarios"+ "\n"+
+                        "Despliegue en la nube"+"\n"+ "Migración de datos"),
                 pedirDatos("Descripción:"),
                 Double.parseDouble(pedirDatos("Precio del servicio ($):")),
-                pedirDatos("Disponibilidad:")
+                pedirDatos("¿Está disponible? (SI/NO):")
         ));
 
         if (registro) {
@@ -127,24 +129,32 @@ public class Main {
     }
 
     private static void solicitarProyecto() {
-        boolean registro = empresa.registarProyecto(new Proyecto(
+        String cedula = pedirDatos("Ingrese la Cédula / NIT del cliente:");
+        Cliente clienteEncontrado = empresa.buscarCliente(cedula);
+        if (clienteEncontrado == null) {
+            mostrarMensaje("El cliente no está registrado. Por favor regístrelo primero.");
+            return;
+        }
+        boolean registro = empresa.registrarProyecto(
+                new Proyecto(
                 pedirDatos("Código:"),
+                clienteEncontrado,
                 LocalDate.parse(pedirDatos("Fecha Solicitud (ej: 2026-05-10):")),
                 LocalDate.parse(pedirDatos("Fecha Inicio (ej: 2026-05-10):")),
                 LocalDate.parse(pedirDatos("Fecha Entrega (ej: 2026-05-10):")),
-                pedirDatos("Estado (Pendiente/Confirmado/En curso/Finalizado/Cancelado):"),
-                pedirDatos("Método Pago (Tarjeta/Transferencia/Efectivo):"),
+                pedirDatos("Estado:"+"\n"+"Pendiente"+"\n"+"Confirmado"+"\n"+"En curso"+"\n"+
+                        "Finalizado"+"\n"+"Cancelado"),
+                pedirDatos("Método Pago"+"\n"+"Tarjeta"+"\n"+"Transferencia"+"\n"+"Efectivo"),
                 Integer.parseInt(pedirDatos("Días de desarrollo estimado:")),
                 Double.parseDouble(pedirDatos("Porcentaje de descuento (%):"))
         ));
 
         if (registro) {
-            mostrarMensaje("Proyecto registrado exitosamente." );
-        }else{
+            mostrarMensaje("Proyecto registrado exitosamente para " + clienteEncontrado.getNombre() + ".");
+        } else {
             mostrarMensaje("Sin espacio para más proyectos.");
         }
     }
-
     private static void asignarDesarrollador() {
         boolean registro = empresa.asignarDesarrolladorAProyecto(
                 pedirDatos("Código del proyecto:"),

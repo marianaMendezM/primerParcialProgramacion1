@@ -4,10 +4,11 @@ import java.time.LocalDate;
 
 public class Proyecto {
     private String id;
+    private Cliente cliente;
     private LocalDate fechaSolicitud;
     private LocalDate fechaInicio;
     private LocalDate fechaEntrega;
-    private String estado; // <--- Punto y coma corregido
+    private String estado;
     private String metodoPago;
     private double valorTotal;
     private int diasDesarrollo;
@@ -16,8 +17,7 @@ public class Proyecto {
     private Desarrollador[] listDesarrollador;
     private ServiciosAdicionales[] listServiciosAdicionales;
 
-    // Constructor ajustado a los 8 parámetros que se envían desde Main.java
-    public Proyecto(String id, LocalDate fechaSolicitud, LocalDate fechaInicio, LocalDate fechaEntrega,
+    public Proyecto(String id,Cliente cliente, LocalDate fechaSolicitud, LocalDate fechaInicio, LocalDate fechaEntrega,
                     String estado, String metodoPago, int diasDesarrollo, double descuentoClienteFrecuente) {
         this.id = id;
         this.fechaSolicitud = fechaSolicitud;
@@ -70,7 +70,7 @@ public class Proyecto {
                 }
             }
         } else if (nuevoEstado.equalsIgnoreCase("Finalizado") || nuevoEstado.equalsIgnoreCase("Cancelado")) {
-            for (int i = 0; i < listDesarrollador.length; i++) { // <--- i++ agregado para evitar bucle infinito
+            for (int i = 0; i < listDesarrollador.length; i++) {
                 if (listDesarrollador[i] != null) {
                     listDesarrollador[i].setEstado("Disponible");
                 }

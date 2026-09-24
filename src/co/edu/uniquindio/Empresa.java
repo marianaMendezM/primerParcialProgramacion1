@@ -25,7 +25,15 @@ public class Empresa {
         this.listProyecto = new Proyecto[10];
         this.listServicios = new ServiciosAdicionales[10];
     }
-    public boolean registarCliente(Cliente nuevoCliente){
+    public boolean registrarCliente(Cliente nuevoCliente) {
+        if (nuevoCliente == null) {
+            return false;
+        }
+        for (int i = 0; i < listClientes.length; i++) {
+            if (listClientes[i] != null && listClientes[i].getCedula().equals(nuevoCliente.getCedula())) {
+                return false;
+            }
+        }
         for (int i = 0; i < listClientes.length; i++) {
             if (listClientes[i] == null) {
                 listClientes[i] = nuevoCliente;
@@ -43,7 +51,10 @@ public class Empresa {
         }
         return false;
     }
-    public boolean registarProyecto (Proyecto nuevoProyecto) {
+    public boolean registrarProyecto(Proyecto nuevoProyecto) {
+        if (nuevoProyecto == null) {
+            return false;
+        }
         for (int i = 0; i < listProyecto.length; i++) {
             if (listProyecto[i] == null) {
                 listProyecto[i] = nuevoProyecto;
@@ -60,6 +71,17 @@ public class Empresa {
             }
         }
         return false;
+    }
+    public Cliente buscarCliente(String cedula) {
+        if (cedula == null) {
+            return null;
+        }
+        for (int i = 0; i < listClientes.length; i++) {
+            if (listClientes[i] != null && listClientes[i].getCedula().equalsIgnoreCase(cedula.trim())) {
+                return listClientes[i];
+            }
+        }
+        return null;
     }
 
     public Desarrollador buscarDesarrollador(String codigo) {
