@@ -30,6 +30,7 @@ public class Proyecto {
         this.descuentoClienteFrecuente = descuentoClienteFrecuente;
         this.listDesarrollador = new Desarrollador[10];
         this.listServiciosAdicionales = new ServiciosAdicionales[10];
+        this.cliente=cliente;
     }
 
     public boolean agregarDesarrollador(Desarrollador nuevo) {
@@ -127,4 +128,7 @@ public class Proyecto {
 
     public Desarrollador[] getListDesarrollador() { return listDesarrollador; }
     public ServiciosAdicionales[] getListServiciosAdicionales() { return listServiciosAdicionales; }
+
+    public Cliente getCliente() {return cliente;}
+    public void setCliente(Cliente cliente) {this.cliente = cliente;}
 }

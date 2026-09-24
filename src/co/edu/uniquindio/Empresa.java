@@ -108,9 +108,9 @@ public class Empresa {
         }
         return null;
     }
-    public boolean asignarDesarrolladorAProyecto(String idProyecto, String codigoDev) {
+    public boolean asignarDesarrolladorAProyecto(String idProyecto, String codigoDesarrollador) {
         Proyecto p = buscarProyecto(idProyecto);
-        Desarrollador d = buscarDesarrollador(codigoDev);
+        Desarrollador d = buscarDesarrollador(codigoDesarrollador);
         if (p != null && d != null) {
             return p.agregarDesarrollador(d);
         }

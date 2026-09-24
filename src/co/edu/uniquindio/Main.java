@@ -111,23 +111,27 @@ public class Main {
     }
 
     private static void solicitarServicio() {
+        String codigo = pedirDatos("Ingrese el Código:");
+        String nombre = pedirDatos("Ingrese el nombre del servicio:" + "\n" +
+                "Soporte técnico" + "\n" + "Capacitación de usuarios" + "\n" +
+                "Despliegue en la nube" + "\n" + "Migración de datos");
+        String descripcion = pedirDatos("Descripción:");
+        double precio = Double.parseDouble(pedirDatos("Precio del servicio ($):"));
+        String disponibilidad = pedirDatos("¿Está disponible? (SI/NO):");
+        if (!disponibilidad.trim().equalsIgnoreCase("SI")) {
+            mostrarMensaje("El servicio no está disponible, por lo que no se registrará en el sistema.");
+            return;
+        }
         boolean registro = empresa.registrarServicio(new ServiciosAdicionales(
-                pedirDatos("Ingrese el Código:"),
-                pedirDatos("Ingrese el nombre del servicio:"+"\n"+
-                        "Soporte técnico"+"\n"+ "Capacitación de usuarios"+ "\n"+
-                        "Despliegue en la nube"+"\n"+ "Migración de datos"),
-                pedirDatos("Descripción:"),
-                Double.parseDouble(pedirDatos("Precio del servicio ($):")),
-                pedirDatos("¿Está disponible? (SI/NO):")
+                codigo, nombre, descripcion, precio, disponibilidad
         ));
 
         if (registro) {
             mostrarMensaje("Servicio registrado exitosamente.");
-        }else {
+        } else {
             mostrarMensaje("Sin espacio para más servicios.");
         }
     }
-
     private static void solicitarProyecto() {
         String cedula = pedirDatos("Ingrese la Cédula / NIT del cliente:");
         Cliente clienteEncontrado = empresa.buscarCliente(cedula);
@@ -219,15 +223,15 @@ public class Main {
         mostrarMensaje("El total de proyectos solicitados en " + fecha + " es: $" + empresa.calcularIngresoFecha(fecha));
     }
 
-        private static void solicitarTotalProyecto() {
-            String id = pedirDatos("Ingrese el código del proyecto:");
-            double total = empresa.consultarTotalProyecto(id);
-            if (total != 1) {
-                mostrarMensaje("El valor total calculated para el proyecto ");
-            }else{
-                mostrarMensaje("Proyecto no encontrado" );
-            }
+    private static void solicitarTotalProyecto() {
+        String id = pedirDatos("Ingrese el código del proyecto:");
+        double total = empresa.consultarTotalProyecto(id);
+        if (total != -1) {
+            mostrarMensaje("El valor total calculado para el proyecto (" + id + ") es: $" + total);
+        } else {
+            mostrarMensaje("Proyecto no encontrado.");
         }
+    }
 
     private static String pedirDatos(String mensaje) {
         return JOptionPane.showInputDialog(null, mensaje);

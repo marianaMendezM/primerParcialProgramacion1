@@ -3,14 +3,14 @@ package co.edu.uniquindio;
 public class ServiciosAdicionales {
     private String codigo;
     private String nombre;
-    private String descripccion;
+    private String descripcion;
     private double precio;
     private String disponibilidad;
 
-    public ServiciosAdicionales(String codigo, String nombre, String descripccion, double precio, String disponibilidad) {
+    public ServiciosAdicionales(String codigo, String nombre, String descripcion, double precio, String disponibilidad) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.descripccion = descripccion;
+        this.descripcion = descripcion;
         this.precio = precio;
         this.disponibilidad = disponibilidad;
     }
@@ -31,12 +31,12 @@ public class ServiciosAdicionales {
         this.nombre = nombre;
     }
 
-    public String getDescripccion() {
-        return descripccion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripccion(String descripccion) {
-        this.descripccion = descripccion;
+    public void setDescripcion(String descripccion) {
+        this.descripcion = descripccion;
     }
 
     public double getPrecio() {

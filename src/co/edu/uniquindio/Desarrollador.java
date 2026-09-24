@@ -4,15 +4,15 @@ public class Desarrollador {
     private String codigo;
     private String equipoTrabajo;
     private String nivel;
-    private int numPoryectosSimultaneos;
+    private int numProyectosSimultaneos;
     private double tarifaDiaria;
     private String estado;
 
-    public Desarrollador(String codigo, String equipoTrabajo, String nivel, int numPoryectosSimultaneos, double tarifaDiaria, String estado) {
+    public Desarrollador(String codigo, String equipoTrabajo, String nivel, int numProyectosSimultaneos, double tarifaDiaria, String estado) {
         this.codigo = codigo;
         this.equipoTrabajo = equipoTrabajo;
         this.nivel = nivel;
-        this.numPoryectosSimultaneos = numPoryectosSimultaneos;
+        this.numProyectosSimultaneos = numProyectosSimultaneos;
         this.tarifaDiaria = tarifaDiaria;
         this.estado = estado;
     }
@@ -44,12 +44,12 @@ public class Desarrollador {
         this.nivel = nivel;
     }
 
-    public int getNumPoryectosSimultaneos() {
-        return numPoryectosSimultaneos;
+    public int getNumProyectosSimultaneos() {
+        return numProyectosSimultaneos;
     }
 
-    public void setNumPoryectosSimultaneos(int numPoryectosSimultaneos) {
-        this.numPoryectosSimultaneos = numPoryectosSimultaneos;
+    public void setNumProyectosSimultaneos(int numPoryectosSimultaneos) {
+        this.numProyectosSimultaneos = numProyectosSimultaneos;
     }
 
     public double getTarifaDiaria() {
