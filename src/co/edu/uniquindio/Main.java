@@ -78,18 +78,23 @@ public class Main {
     }
 
     private static void solicitarCliente() {
-        boolean cliente = empresa.registarCliente(new Cliente(
+        boolean registro = empresa.registarCliente(new Cliente(
                 pedirDatos("Ingrese la Cédula / NIT:"),
                 pedirDatos("Ingrese el Nombre / Razón social:"),
                 pedirDatos("Ingrese el número de teléfono:"),
                 pedirDatos("Ingrese el correo del cliente:"),
                 pedirDatos("Ingrese el país de procedencia:")
         ));
-        mostrarMensaje(cliente ? "Cliente registrado exitosamente." : "Sin espacio para más clientes.");
+
+        if (registro) {
+            mostrarMensaje("Cliente registrado exitosamente.");
+        }else{
+            mostrarMensaje("Sin espacio para más clientes.");
+        }
     }
 
     private static void solicitarDesarrollador() {
-        boolean desarrollador = empresa.registrarDesarrollador(new Desarrollador(
+        boolean registro = empresa.registrarDesarrollador(new Desarrollador(
                 pedirDatos("Ingrese el Código/Cédula del desarrollador:"),
                 pedirDatos("Ingrese el equipo de trabajo:"),
                 pedirDatos("Nivel (Junior/Semisenior/Senior):"),
@@ -97,22 +102,32 @@ public class Main {
                 Double.parseDouble(pedirDatos("Tarifa diaria ($):")),
                 pedirDatos("Estado (Disponible/Asignado/Ocupado/En capacitación):")
         ));
-        mostrarMensaje(desarrollador ? "Desarrollador registrado exitosamente." : "Sin espacio para más desarrolladores.");
+
+        if (registro) {
+            mostrarMensaje("Desarrollador registrado exitosamente.");     
+        }else{
+            mostrarMensaje("Sin espacio para más desarrolladores ");
+        }
     }
 
     private static void solicitarServicio() {
-        boolean servicio = empresa.registrarServicio(new ServiciosAdicionales(
+        boolean registro = empresa.registrarServicio(new ServiciosAdicionales(
                 pedirDatos("Ingrese el Código:"),
                 pedirDatos("Ingrese el nombre del servicio:"),
                 pedirDatos("Descripción:"),
                 Double.parseDouble(pedirDatos("Precio del servicio ($):")),
                 pedirDatos("Disponibilidad:")
         ));
-        mostrarMensaje(servicio ? "Servicio registrado exitosamente." : "Sin espacio para más servicios.");
+
+        if (registro) {
+            mostrarMensaje("Servicio registrado exitosamente.");
+        }else {
+            mostrarMensaje("Sin espacio para más servicios.");
+        }
     }
 
     private static void solicitarProyecto() {
-        boolean proyecto = empresa.registarProyecto(new Proyecto(
+        boolean registro = empresa.registarProyecto(new Proyecto(
                 pedirDatos("Código:"),
                 LocalDate.parse(pedirDatos("Fecha Solicitud (ej: 2026-05-10):")),
                 LocalDate.parse(pedirDatos("Fecha Inicio (ej: 2026-05-10):")),
@@ -123,33 +138,48 @@ public class Main {
                 Double.parseDouble(pedirDatos("Porcentaje de descuento (%):"))
         ));
 
-        mostrarMensaje(proyecto ? "Proyecto registrado exitosamente." : "Sin espacio para más proyectos.");
+        if (registro) {
+            mostrarMensaje("Proyecto registrado exitosamente." );
+        }else{
+            mostrarMensaje("Sin espacio para más proyectos.");
+        }
     }
 
     private static void asignarDesarrollador() {
-        boolean exito = empresa.asignarDesarrolladorAProyecto(
+        boolean registro = empresa.asignarDesarrolladorAProyecto(
                 pedirDatos("Código del proyecto:"),
                 pedirDatos("Código del desarrollador:")
         );
-        mostrarMensaje(exito ? "Desarrollador asignado exitosamente al proyecto."
-                : "No se pudo asignar. Verifique que el proyecto exista y que el desarrollador esté 'Disponible'.");
+        if (registro) {
+            mostrarMensaje("Desarrollador asignado exitosamente al proyecto.") ;   
+        }else{
+            mostrarMensaje("No se pudo asignar. Verifique que el proyecto exista y que el desarrollador esté 'Disponible'.");;
+        }
     }
 
     private static void asociarServicio() {
-        boolean exito = empresa.asociarServicioAProyecto(
+        boolean registro = empresa.asociarServicioAProyecto(
                 pedirDatos("Código del proyecto:"),
                 pedirDatos("Código del servicio adicional:")
         );
-        mostrarMensaje(exito ? "Servicio asociado exitosamente al proyecto."
-                : "No se pudo asociar el servicio. Verifique los códigos.");
+        if (registro) {
+            mostrarMensaje("Servicio asociado exitosamente al proyecto ");
+        } else{
+            mostrarMensaje("No se pudo asociar el servicio. Verifique los códigos.");
+        }
+
     }
 
     private static void cambiarEstadoProyecto() {
-        boolean exito = empresa.cambiarEstadoProyecto(
+        boolean registro = empresa.cambiarEstadoProyecto(
                 pedirDatos("Código del proyecto:"),
                 pedirDatos("Nuevo Estado (Confirmado, En curso, Finalizado, Cancelado):")
         );
-        mostrarMensaje(exito ? "Estado actualizado correctamente." : "Proyecto no encontrado.");
+        if (registro) {
+            mostrarMensaje("Estado actualizado correctamente.");
+        }else{
+            mostrarMensaje("Proyecto no encontrado.");
+        }
     }
 
     private static void solicitarConsultarCliente() {
@@ -157,11 +187,18 @@ public class Main {
         Cliente cliente = empresa.consultarTelefonoCliente(tel);
 
         if (cliente != null) {
+            String esNumPerfecto;
+
+            if (empresa.esPerfecto(tel)) {
+                esNumPerfecto = "Si";
+            }else {
+                esNumPerfecto = "No";
+            }
             mostrarMensaje("Cliente encontrado:\n" +
                     "Nombre: " + cliente.getNombre() + "\n" +
                     "Cédula/NIT: " + cliente.getCedula() + "\n" +
                     "Teléfono: " + cliente.getTelefono() + "\n" +
-                    "¿El teléfono es un Número Perfecto?: " + (empresa.esPerfecto(tel) ? "SÍ" : "NO"));
+                    "¿El teléfono es un Número Perfecto?: " + esNumPerfecto);
         } else {
             mostrarMensaje("No existe un cliente con el teléfono " + tel);
         }
@@ -169,15 +206,18 @@ public class Main {
 
     private static void solicitarIngresosFecha() {
         LocalDate fecha = LocalDate.parse(pedirDatos("Ingrese fecha a consultar (ej: 2026-05-10):"));
-        mostrarMensaje("El total recaudado por proyectos solicitados el " + fecha + " es: $" + empresa.calcularIngresoFecha(fecha));
+        mostrarMensaje("El total de proyectos solicitados en " + fecha + " es: $" + empresa.calcularIngresoFecha(fecha));
     }
 
-    private static void solicitarTotalProyecto() {
-        String id = pedirDatos("Ingrese el código del proyecto:");
-        double total = empresa.consultarTotalProyecto(id);
-        mostrarMensaje(total != -1 ? "El valor total calculated para el proyecto " + id + " es: $" + total
-                : "Proyecto no encontrado.");
-    }
+        private static void solicitarTotalProyecto() {
+            String id = pedirDatos("Ingrese el código del proyecto:");
+            double total = empresa.consultarTotalProyecto(id);
+            if (total != 1) {
+                mostrarMensaje("El valor total calculated para el proyecto ");
+            }else{
+                mostrarMensaje("Proyecto no encontrado" );
+            }
+        }
 
     private static String pedirDatos(String mensaje) {
         return JOptionPane.showInputDialog(null, mensaje);
