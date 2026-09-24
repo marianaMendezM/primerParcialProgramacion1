@@ -1,5 +1,5 @@
 package co.edu.uniquindio;
-import java.nio.charset.StandardCharsets;
+
 import java.time.LocalDate;
 
 public class Proyecto {
@@ -7,17 +7,18 @@ public class Proyecto {
     private LocalDate fechaSolicitud;
     private LocalDate fechaInicio;
     private LocalDate fechaEntrega;
-    private String estado;
+    private String estado; // <--- Punto y coma corregido
     private String metodoPago;
     private double valorTotal;
     private int diasDesarrollo;
     private double descuentoClienteFrecuente;
 
-    private Desarrollador[]listDesarrollador;
-    private ServiciosAdicionales[]listServiciosAdicionales;
+    private Desarrollador[] listDesarrollador;
+    private ServiciosAdicionales[] listServiciosAdicionales;
 
-    public Proyecto(String id, LocalDate fechaSolicitud, LocalDate fechaInicio, LocalDate fechaEntrega, String estado, String metodoPago, double valorTotal, int diasDesarrollo,
-                    double descuentoClienteFrecuente, Desarrollador[] listDesaroolador, ServiciosAdicionales[] listServiciosAdicionales) {
+    // Constructor ajustado a los 8 parámetros que se envían desde Main.java
+    public Proyecto(String id, LocalDate fechaSolicitud, LocalDate fechaInicio, LocalDate fechaEntrega,
+                    String estado, String metodoPago, int diasDesarrollo, double descuentoClienteFrecuente) {
         this.id = id;
         this.fechaSolicitud = fechaSolicitud;
         this.fechaInicio = fechaInicio;
@@ -30,14 +31,15 @@ public class Proyecto {
         this.listDesarrollador = new Desarrollador[10];
         this.listServiciosAdicionales = new ServiciosAdicionales[10];
     }
-    public boolean agregarDesarrollador (Desarrollador nuevo){
-        if (nuevo == null || !nuevo.estaDisponible()){
+
+    public boolean agregarDesarrollador(Desarrollador nuevo) {
+        if (nuevo == null || !nuevo.estaDisponible()) {
             return false;
         }
-        for (int i=0;i<listDesarrollador.length;i++){
-            if (listDesarrollador[i]==null){
-                listDesarrollador[i]=nuevo;
-                if(this.estado!=null && (this.estado.equalsIgnoreCase("Confirmado")|| this.estado.equalsIgnoreCase("En curso"))){
+        for (int i = 0; i < listDesarrollador.length; i++) {
+            if (listDesarrollador[i] == null) {
+                listDesarrollador[i] = nuevo;
+                if (this.estado != null && (this.estado.equalsIgnoreCase("Confirmado") || this.estado.equalsIgnoreCase("En curso"))) {
                     nuevo.setEstado("Asignado");
                 }
                 return true;
@@ -45,133 +47,84 @@ public class Proyecto {
         }
         return false;
     }
-    public boolean agregarServicio(ServiciosAdicionales servicio){
-        if(servicio==null){
+
+    public boolean agregarServicio(ServiciosAdicionales servicio) {
+        if (servicio == null) {
             return false;
         }
-        for (int i=0;i<listServiciosAdicionales.length;i++){
-            if (listServiciosAdicionales[i]==null){
-                listServiciosAdicionales[i]=servicio;
+        for (int i = 0; i < listServiciosAdicionales.length; i++) {
+            if (listServiciosAdicionales[i] == null) {
+                listServiciosAdicionales[i] = servicio;
                 return true;
             }
         }
         return false;
     }
-    public void cambiarEstado(String nuevoEstado){
-        this.estado=nuevoEstado;
-        if (nuevoEstado.equalsIgnoreCase("Confirmado")|| nuevoEstado.equalsIgnoreCase("En curso")){
-            for (int i=0; i<listDesarrollador.length; i++){
-                if(listDesarrollador[i]!=null){
+
+    public void cambiarEstado(String nuevoEstado) {
+        this.estado = nuevoEstado;
+        if (nuevoEstado.equalsIgnoreCase("Confirmado") || nuevoEstado.equalsIgnoreCase("En curso")) {
+            for (int i = 0; i < listDesarrollador.length; i++) {
+                if (listDesarrollador[i] != null) {
                     listDesarrollador[i].setEstado("Asignado");
                 }
             }
-        } else if (nuevoEstado.equalsIgnoreCase("Finalizado")|| nuevoEstado.equalsIgnoreCase("Cancelado")) {
-            for (int i=0; i<listDesarrollador.length;){
-                if (listDesarrollador[i]!=null){
+        } else if (nuevoEstado.equalsIgnoreCase("Finalizado") || nuevoEstado.equalsIgnoreCase("Cancelado")) {
+            for (int i = 0; i < listDesarrollador.length; i++) { // <--- i++ agregado para evitar bucle infinito
+                if (listDesarrollador[i] != null) {
                     listDesarrollador[i].setEstado("Disponible");
                 }
             }
         }
     }
-    public double calcularTotal(){
-        double tarifaDiariaTotal=0.0;
-        for (int i=0; i<listDesarrollador.length;i++){
-          if (listDesarrollador[i]!=null){
-              tarifaDiariaTotal+=listDesarrollador[i].getTarifaDiaria();
-          }
-        }
-        double costoDesarrollo=tarifaDiariaTotal*diasDesarrollo;
-        double costoServicios=0.0;
-        for (int i=0;i<listServiciosAdicionales.length;i++){
-            if(listServiciosAdicionales[i]!=null){
-                costoServicios+=listServiciosAdicionales[i].getPrecio();
+
+    public double calcularTotal() {
+        double tarifaDiariaTotal = 0.0;
+        for (int i = 0; i < listDesarrollador.length; i++) {
+            if (listDesarrollador[i] != null) {
+                tarifaDiariaTotal += listDesarrollador[i].getTarifaDiaria();
             }
         }
-        double subtotal= costoDesarrollo+costoServicios;
-        double valorDescuenco= subtotal*(descuentoClienteFrecuente/100.0);
-        this.valorTotal=subtotal-valorDescuenco;
+        double costoDesarrollo = tarifaDiariaTotal * diasDesarrollo;
+        double costoServicios = 0.0;
+        for (int i = 0; i < listServiciosAdicionales.length; i++) {
+            if (listServiciosAdicionales[i] != null) {
+                costoServicios += listServiciosAdicionales[i].getPrecio();
+            }
+        }
+        double subtotal = costoDesarrollo + costoServicios;
+        double valorDescuento = subtotal * (descuentoClienteFrecuente / 100.0);
+        this.valorTotal = subtotal - valorDescuento;
         return this.valorTotal;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public LocalDate getFechaSolicitud() { return fechaSolicitud; }
+    public void setFechaSolicitud(LocalDate fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
 
-    public LocalDate getFechaSolicitud() {
-        return fechaSolicitud;
-    }
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
 
-    public void setFechaSolicitud(LocalDate fechaSolicitud) {
-        this.fechaSolicitud = fechaSolicitud;
-    }
+    public LocalDate getFechaEntrega() { return fechaEntrega; }
+    public void setFechaEntrega(LocalDate fechaEntrega) { this.fechaEntrega = fechaEntrega; }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
+    public String getMetodoPago() { return metodoPago; }
+    public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
 
-    public LocalDate getFechaEntrega() {
-        return fechaEntrega;
-    }
+    public int getDiasDesarrollo() { return diasDesarrollo; }
+    public void setDiasDesarrollo(int diasDesarrollo) { this.diasDesarrollo = diasDesarrollo; }
 
-    public void setFechaEntrega(LocalDate fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
-    }
+    public double getValorTotal() { return valorTotal; }
+    public void setValorTotal(double valorTotal) { this.valorTotal = valorTotal; }
 
-    public String getEstado() {
-        return estado;
-    }
+    public double getDescuentoClienteFrecuente() { return descuentoClienteFrecuente; }
+    public void setDescuentoClienteFrecuente(double descuentoClienteFrecuente) { this.descuentoClienteFrecuente = descuentoClienteFrecuente; }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getMetodoPago() {
-        return metodoPago;
-    }
-
-    public void setMetodoPago(String metodoPago) {
-        this.metodoPago = metodoPago;
-    }
-
-    public int getDiasDesarrollo() {
-        return diasDesarrollo;
-    }
-
-    public void setDiasDesarrollo(int diasDesarrollo) {
-        this.diasDesarrollo = diasDesarrollo;
-    }
-
-    public double getValorTotal() {
-        return valorTotal;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-
-    public double getDescuentoClienteFrecuente() {
-        return descuentoClienteFrecuente;
-    }
-
-    public void setDescuentoClienteFrecuente(double descuentoClienteFrecuente) {
-        this.descuentoClienteFrecuente = descuentoClienteFrecuente;
-    }
-
-    public Desarrollador[] getListDesarrollador() {
-        return listDesarrollador;
-    }
-
-    public ServiciosAdicionales[] getListServiciosAdicionales() {
-        return listServiciosAdicionales;
-    }
-
+    public Desarrollador[] getListDesarrollador() { return listDesarrollador; }
+    public ServiciosAdicionales[] getListServiciosAdicionales() { return listServiciosAdicionales; }
 }
-

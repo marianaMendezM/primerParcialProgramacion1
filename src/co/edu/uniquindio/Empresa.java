@@ -8,14 +8,12 @@ public class Empresa {
     private String direccion;
     private String telefono;
     private String paginaWeb;
-
     private Cliente[]listClientes;
     private  Desarrollador[]listDesarrollador;
     private Proyecto[]listProyecto;
     private ServiciosAdicionales[]listServicios;
 
-    public Empresa(String id, String nombreComercial, String direccion, String telefono, String paginaWeb, Cliente[] listClientes,
-                   Desarrollador[] listDesarrollador, Proyecto[] listProyecto, ServiciosAdicionales[] listServicios) {
+    public Empresa(String id, String nombreComercial, String direccion, String telefono, String paginaWeb) {
         this.id = id;
         this.nombreComercial = nombreComercial;
         this.direccion = direccion;
@@ -25,7 +23,7 @@ public class Empresa {
         this.listClientes = new Cliente[10];
         this.listDesarrollador = new Desarrollador[10];
         this.listProyecto = new Proyecto[10];
-        listServicios = new ServiciosAdicionales[10];
+        this.listServicios = new ServiciosAdicionales[10];
     }
     public boolean registarCliente(Cliente nuevoCliente){
         for (int i = 0; i < listClientes.length; i++) {
@@ -106,14 +104,21 @@ public class Empresa {
     }
 
     public boolean esPerfecto(String telefono) {
-        int numero = Integer.parseInt(telefono);
-        int suma = 0;
-        for (int i = 1; i < numero; i++) {
-            if (numero % i == 0) {
-                suma += i;
+        try {
+            int numero = Integer.parseInt(telefono);
+            if (numero <= 0) return false;
+
+            int suma = 0;
+            for (int i = 1; i < numero; i++) {
+                if (numero % i == 0) {
+                    suma += i;
+                }
             }
+            return suma == numero;
+        } catch (NumberFormatException e) {
+
+            return false;
         }
-        return suma == numero;
     }
 
     public double calcularIngresoFecha(LocalDate fechaConsulta) {
@@ -146,9 +151,33 @@ public class Empresa {
             return "No hay proyectos registrados.";
         }
     }
+    public double consultarTotalProyecto(String idProyecto) {
+        Proyecto p = buscarProyecto(idProyecto);
+        if (p != null) {
+            return p.calcularTotal();
+        }
+        return -1;
+    }
+    public boolean asociarServicioAProyecto(String idProyecto, String codigoServicio) {
+        Proyecto p = buscarProyecto(idProyecto);
+        ServiciosAdicionales s = buscarServicio(codigoServicio);
+        if (p != null && s != null) {
+            return p.agregarServicio(s);
+        }
+        return false;
+    }
 
-    public String getNit() { return nit; }
-    public void setNit(String nit) { this.nit = nit; }
+    public boolean cambiarEstadoProyecto(String idProyecto, String nuevoEstado) {
+        Proyecto p = buscarProyecto(idProyecto);
+        if (p != null) {
+            p.setEstado(nuevoEstado);
+            return true;
+        }
+        return false;
+    }
+
+    public String getId() { return id; }
+    public void setNit(String nit) { this.id = nit; }
 
     public String getNombreComercial() { return nombreComercial; }
     public void setNombreComercial(String nombreComercial) { this.nombreComercial = nombreComercial; }

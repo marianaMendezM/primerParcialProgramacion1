@@ -16,6 +16,9 @@ public class Desarrollador {
         this.tarifaDiaria = tarifaDiaria;
         this.estado = estado;
     }
+    public boolean estaDisponible() {
+        return this.estado != null && this.estado.equalsIgnoreCase("Disponible");
+    }
 
     public String getCodigo() {
         return codigo;
